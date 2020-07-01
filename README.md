@@ -32,7 +32,7 @@ Each method uses the following format:
 
 `get<titled_endpoint_name>(params)`
 
-`params` is an key-value object used to filter results.
+`params` is a key-value object used to filter results.
 
 Please consult the official documentation for all available endpoints.
 
