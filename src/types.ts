@@ -1,9 +1,15 @@
+/**
+ * Response interface
+ */
 export interface Response<T> {
     response: T[]
     status_code: number
     status_message: string
 }
 
+/**
+ * Course interface
+ */
 export interface Course {
     id: string
     code: string
@@ -41,6 +47,9 @@ export interface Course {
     last_updated: string
 }
 
+/**
+ * Textbook interface
+ */
 export interface Textbook {
     id: string
     isbn: string
@@ -62,6 +71,9 @@ export interface Textbook {
     last_updated: string
 }
 
+/**
+ * Exam interface
+ */
 export interface Exam {
     id: string
     course_id: string
@@ -79,6 +91,9 @@ export interface Exam {
     last_updated: string
 }
 
+/**
+ * Eval interface
+ */
 export interface Eval {
     id: string
     name: string
@@ -102,6 +117,9 @@ export interface Eval {
     last_updated: string;
 }
 
+/**
+ * Food interface
+ */
 export interface Food {
     id: string
     name: string
@@ -158,6 +176,9 @@ export interface Food {
     last_updated: string
 }
 
+/**
+ * Service interface
+ */
 export interface Service {
     id: string
     name: string
@@ -176,6 +197,9 @@ export interface Service {
     last_updated: string
 }
 
+/**
+ * Building interface
+ */
 export interface Building {
     id: string
     code: string
@@ -196,6 +220,9 @@ export interface Building {
     last_updated: string
 }
 
+/**
+ * Parking interface
+ */
 export interface Parking {
     id: string
     name: string
