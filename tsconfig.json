@@ -5,7 +5,7 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "./dist",
-    "removeComments": true,
+    "removeComments": false,
     "downlevelIteration": true,
     "declaration": true,
     /* Strict Type-Checking Options */
