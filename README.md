@@ -1,6 +1,6 @@
 # Nikel API for Node.js
 
-[![npm version](https://badge.fury.io/js/nikel.svg)](https://www.npmjs.com/package/nikel)
+[![npm](https://img.shields.io/npm/v/nikel)](https://www.npmjs.com/package/nikel)
 
 Please consult the [official Nikel API docs](https://docs.nikel.ml/) for information on query values, and response values.
 
