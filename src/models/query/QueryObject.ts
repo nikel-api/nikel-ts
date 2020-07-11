@@ -3,32 +3,28 @@ import QueryError from './Exceptions';
 /** A class to represent all the queries that can be made. */
 export default class QueryObject {
     /** Keep track of what user wants to query for,
-     * where each attribute can have a different properties (equality, greater than, etc.)
+     * where each attribute can have a different properties ($eq, greater than, etc.)
      * Each key will have the following $properties value:
      * {
-     *      equality: string[],
-     *      inequality: string[],
-     *      less_than: (number | string)[],
-     *      less_than_equal_to: (number | string)[],
-     *      greater_than: (number | string)[],
-     *      greater_than_equal_to: (number | string)[],
-     *      starts_with: string,
-     *      ends_with: string
+     *      $eq: string[],
+     *      $ne: string[],
+     *      $lt: (number | string)[],
+     *      $lte: (number | string)[],
+     *      $gt: (number | string)[],
+     *      $gte: (number | string)[],
+     *      $sw: string,
+     *      $ew: string
      * }
      */
     public attributes: any = { };
 
-    /** Map a given symbol to the type of operation it is. */
-    private static SYMBOL_TO_TYPE_MAPPING = {
-        '$eq': 'equality',
-        '$ne': 'inequality',
-        '$lt': 'less_than',
-        '$lte': 'less_than_equal_to',
-        '$gt': 'greater_than',
-        '$gte': 'greater_than_equal_to',
-        '$sw': 'starts_with',
-        '$ew': 'ends_with'
-    }
+    /** List of allowed operators */
+    public static ALLOWED_SYMBOLS = [
+        '$eq', '$ne',
+        '$lt', '$lte',
+        '$gt', '$gte',
+        '$sw', '$ew'
+    ]
 
     /** Keep track of meta-data such as limit,  */
     private meta = { limit: 100, offset: 0 };
@@ -49,7 +45,7 @@ export default class QueryObject {
                 case 'string':
                 case 'number':
                 case 'boolean':
-                    this._handleAtomicUpdate(attribute, value, "equality", this.attributes);
+                    this._handleAtomicUpdate(attribute, value, "$eq", this.attributes);
                     break;
 
                 case 'object':  // Nested objects need to be further broken down
@@ -89,18 +85,23 @@ export default class QueryObject {
 
     }
 
+    /** Get an object representing all the Queries made.
+     * @return An object with all the queries
+     * */
+    public getQuery() {
+        // Deep clone
+        return JSON.parse(JSON.stringify(this.attributes));
+    }
+
     /** For when a single value is assigned to an attribute
      * e.g. Base.where({name: 'some_name'})
      * @param key The attribute in question
      * @param val The value for this attribute (e.g. a string, number, boolean, etc.)
-     * @param update_type The type of update to do to this attribute, e.g. 'equality', 'less_than', etc.
+     * @param update_type The type of update to do to this attribute, e.g. '$eq', '$lt', etc.
      * @param attributes_level A reference to where this object is located in memory, under this.attributes
      */
     private _handleAtomicUpdate(key: string, val: string | number, update_type: string, attributes_level: any) {
-        // console.log('atomic update', key, val, update_type, parent);
-        if(val === 'new_layer_2_val') {
-            console.log('here')
-        }
+
         // Need to ensure it has space and $properties defined for itself
         if(!attributes_level[key]) {
             // Initialize
@@ -123,20 +124,16 @@ export default class QueryObject {
             // Base Case: We're no longer working with objects
             // Make sure we have allocated room for this attribute
             if(!attribute_level[key]) { attribute_level[key] = { } }
-            this._handleAtomicUpdate(key, val, 'equality', attribute_level);
+            this._handleAtomicUpdate(key, val, '$eq', attribute_level);
             return;
         }
 
         // For each object assigned
         for(const update_type in val) {
-            let update_types_mapping = QueryObject.SYMBOL_TO_TYPE_MAPPING;
-
-            // @ts-ignore -- Figure out why it's complaining about the string...
-            let update_type_string = update_types_mapping[update_type];
 
             // If the key is an action such as $eq, $gt, etc.
-            if(update_type_string) {
-                this._handleAtomicUpdate(key, val[update_type], update_type_string, attribute_level);
+            if(QueryObject.ALLOWED_SYMBOLS.includes(update_type)) {
+                this._handleAtomicUpdate(key, val[update_type], update_type, attribute_level);
             }
             else {  // Recursive Step: try again with this field in the object
                 // This is a nested field
@@ -156,18 +153,17 @@ export default class QueryObject {
      * must be initialized
      * */
     private _initializeAttributeValue(attribute: any) {
-        console.log("creating new attributes for: ", attribute)
         attribute['$properties'] = { }
-        attribute['$properties']['equality'] = [];
-        attribute['$properties']['inequality'] = [];
+        attribute['$properties']['$eq'] = [];
+        attribute['$properties']['$ne'] = [];
         
-        attribute['$properties']['less_than'] = [];
-        attribute['$properties']['less_than_equal_to'] = [];
-        attribute['$properties']['greater_than'] = [];
-        attribute['$properties']['greater_than_equal_to'] = [];
+        attribute['$properties']['$lt'] = [];
+        attribute['$properties']['$lte'] = [];
+        attribute['$properties']['$gt'] = [];
+        attribute['$properties']['$gte'] = [];
 
         // Although these two are Arrays, they must have length of AT MOST 1
-        attribute['$properties']['starts_with'] = [];
-        attribute['$properties']['ends_with'] = [];
+        attribute['$properties']['$sw'] = [];
+        attribute['$properties']['$ew'] = [];
     }
 }

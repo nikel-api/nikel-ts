@@ -1,4 +1,5 @@
 import QueryObject from "./query/QueryObject";
+import {RequestFromQueryObject} from "../utils/RequestFromQueryObject";
 
 export default class Base {
     /** Build out query requirements */
@@ -21,7 +22,7 @@ export default class Base {
      * @param new_limit The limit to set.
      * @return this instance
      * */
-    limit(new_limit: number) {
+    public limit(new_limit: number) {
         this.query.limit(new_limit);
         return this;
     }
@@ -31,15 +32,17 @@ export default class Base {
      * @param new_offset The offset to use.
      * @return this instance
      * */
-    offset(new_offset: number) {
+    public offset(new_offset: number) {
         this.query.offset(new_offset);
         return this;
     }
 
     /** Get the results. */
-    get() {
-        let request_params = this.query.compile();
-        console.log(request_params)
+    public get() {
+        let request_params = new RequestFromQueryObject(this.query.getQuery());
+        let request_query = request_params.formattedQuery();
+
+        console.log(request_query)
     }
 
     json_result() {
