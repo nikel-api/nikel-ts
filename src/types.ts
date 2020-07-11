@@ -12,23 +12,23 @@ export interface Response<T> {
  */
 export interface Course {
     id: string
-    code: string
+    code: string | null
     name: string
     description: string
     division: string
     department: string
-    prerequisites: string
-    corequisites: string
-    exclusions: string
-    recommended_preparation: string
+    prerequisites: string | null
+    corequisites: string | null
+    exclusions: string | null
+    recommended_preparation: string | null
     level: string
     campus: string
     term: string
-    arts_and_science_breadth: string
-    arts_and_science_distribution: string
-    utm_distribution: string
-    utsc_breadth: string
-    apsc_electives: string
+    arts_and_science_breadth: string | null
+    arts_and_science_distribution: string | null
+    utm_distribution: string | null
+    utsc_breadth: string | null
+    apsc_electives: string | null
     meeting_sections: {
         code: string
         instructors: string[]
@@ -37,10 +37,10 @@ export interface Course {
             start: number
             end: number
             duration: number
-            location: string
+            location: string | null
         }[]
         size: number
-        enrollment: number
+        enrollment: number | null
         waitlist_option: boolean
         delivery: string
     }[]
@@ -86,7 +86,7 @@ export interface Exam {
     sections: {
         lecture_code: string
         split: string
-        location: string
+        location: string | null
     }[]
     last_updated: string
 }
@@ -104,13 +104,13 @@ export interface Eval {
             lecture_code: string
             firstname: string
             lastname: string
-            s1: number
-            s2: number
-            s3: number
-            s4: number
-            s5: number
-            s6: number
-            invited: number
+            s1: number | null
+            s2: number | null
+            s3: number | null
+            s4: number | null
+            s5: number | null
+            s6: number | null
+            invited: number | null
             responses: number
         }[]
     }[]
@@ -123,10 +123,10 @@ export interface Eval {
 export interface Food {
     id: string
     name: string
-    description: string
-    tags: string
+    description: string | null
+    tags: string | null
     campus: string
-    address: string
+    address: string | null
     coordinates: {
         latitude: number
         longitude: number
@@ -134,44 +134,44 @@ export interface Food {
     hours: {
         sunday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
         monday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
         tuesday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
         wednesday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
         thursday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
         friday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
         saturday: {
             closed: boolean
-            open: number
-            close: number
+            open: number | null
+            close: number | null
         }
-    }
-    image: string
-    url: string
-    twitter: string
-    facebook: string
+    } | null
+    image: string | null
+    url: string | null
+    twitter: string | null
+    facebook: string | null
     attributes: string[]
     last_updated: string
 }
@@ -182,17 +182,17 @@ export interface Food {
 export interface Service {
     id: string
     name: string
-    alias: string
-    building_id: string
-    description: string
+    alias: string | null
+    building_id: string | null
+    description: string | null
     campus: string
-    address: string
-    image: string
+    address: string | null
+    image: string | null
     coordinates: {
         latitude: number
         longitude: number
     }
-    tags: string
+    tags: string | null
     attributes: string[]
     last_updated: string
 }
@@ -202,20 +202,20 @@ export interface Service {
  */
 export interface Building {
     id: string
-    code: string
-    tags: string
+    code: string | null
+    tags: string | null
     name: string
-    short_name: string
+    short_name: string | null
     address: {
-        street: string
-        city: string
-        province: string
-        country: string
-        postal: string
+        street: string | null
+        city: string | null
+        province: string | null
+        country: string | null
+        postal: string | null
     }
     coordinates: {
-        latitude: number
-        longitude: number
+        latitude: number | null
+        longitude: number | null
     }
     last_updated: string
 }
@@ -226,11 +226,11 @@ export interface Building {
 export interface Parking {
     id: string
     name: string
-    alias: string
-    building_id: string
-    description: string
+    alias: string | null
+    building_id: string | null
+    description: string | null
     campus: string
-    address: string
+    address: string | null
     coordinates: {
         latitude: number
         longitude: number
