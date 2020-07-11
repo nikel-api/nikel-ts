@@ -33,12 +33,13 @@ export default class QueryObject {
     /** Keep track of meta-data such as limit,  */
     private meta = { limit: 100, offset: 0 };
 
-    /** A where() query. This can target any attribute,
-     * no matter how deeply nested.
+    /** Combine new query with existing data.
+     * This can target any attribute, no matter how
+     * deeply nested.
      * @param query The query to parse
      * @return this instance
      * */
-    where(query: any) {
+    add_query(query: any) {
         for(const attribute in query) {
             let value = query[attribute];
             let val_type = typeof(value);
@@ -47,6 +48,7 @@ export default class QueryObject {
                 // If value is a simple primitive like string, number, etc. then do an atomic action
                 case 'string':
                 case 'number':
+                case 'boolean':
                     this._handleAtomicUpdate(attribute, value, "equality", this.attributes);
                     break;
 
@@ -79,8 +81,20 @@ export default class QueryObject {
         this.meta.offset = new_offset;
     }
 
+    /** Compile and return this query object into something
+     * that can be directly passed into a request body
+     * @return
+     * */
+    compile() {
+
+    }
+
     /** For when a single value is assigned to an attribute
      * e.g. Base.where({name: 'some_name'})
+     * @param key The attribute in question
+     * @param val The value for this attribute (e.g. a string, number, boolean, etc.)
+     * @param update_type The type of update to do to this attribute, e.g. 'equality', 'less_than', etc.
+     * @param attributes_level A reference to where this object is located in memory, under this.attributes
      */
     private _handleAtomicUpdate(key: string, val: string | number, update_type: string, attributes_level: any) {
         // console.log('atomic update', key, val, update_type, parent);
@@ -96,9 +110,8 @@ export default class QueryObject {
         else if(!attributes_level[key]['$properties']) {
             this._initializeAttributeValue(attributes_level[key]);
         }
-       // console.log({parent: parent, key: key, val: val})
-        attributes_level[key]['$properties'][update_type].push(val);
 
+        attributes_level[key]['$properties'][update_type].push(val);
     }
 
     /** For when a more complicated object is assigned to an attribute
@@ -107,6 +120,7 @@ export default class QueryObject {
     private _handleObjectUpdate(key: string, val: any, attribute_level: any) {
         // If we're dealing with a single value
         if(typeof(val) !== 'object') {
+            // Base Case: We're no longer working with objects
             // Make sure we have allocated room for this attribute
             if(!attribute_level[key]) { attribute_level[key] = { } }
             this._handleAtomicUpdate(key, val, 'equality', attribute_level);
@@ -124,7 +138,8 @@ export default class QueryObject {
             if(update_type_string) {
                 this._handleAtomicUpdate(key, val[update_type], update_type_string, attribute_level);
             }
-            else {  // Otherwise, this is a nested field
+            else {  // Recursive Step: try again with this field in the object
+                // This is a nested field
                 if(!attribute_level[key]) {
                     attribute_level[key] = { };
 
@@ -135,6 +150,11 @@ export default class QueryObject {
         }
     }
 
+    /** Each attribute needs a $properties hash
+     * to keep track of the query being built.
+     * @param attribute The attribute for which a $properties hash
+     * must be initialized
+     * */
     private _initializeAttributeValue(attribute: any) {
         console.log("creating new attributes for: ", attribute)
         attribute['$properties'] = { }

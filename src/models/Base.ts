@@ -12,7 +12,7 @@ export default class Base {
      * @param query An object
      */
     where(query: Record<string, string | object | number | null>) {
-        this.query.where(query);
+        this.query.add_query(query);
         return this;
     }
 
@@ -38,7 +38,8 @@ export default class Base {
 
     /** Get the results. */
     get() {
-        this.endpoint_callback();
+        let request_params = this.query.compile();
+        console.log(request_params)
     }
 
     json_result() {
@@ -51,6 +52,8 @@ function main(){
     b.where({name: 'hi', more_key: {'$eq': 2}, nested: { layer_1: 'layer_1_val', layer_1_2: { '$lt': 5 }, nested_2: { layer_2: 'layer_2_val' } }}).where({name: {'$eq': 'another hi'}}).where({another_key: {'$gt': 5}, more_key: 6})
         .where({nested: {'$ne': 'nested_1_value', nested_2: { '$eq': 'nested_2_value', layer_2: { '$sw': 'some_prefix' } }}}).where({nested: {nested_2: {layer_2: 'new_layer_2_val_2'}}})
     b.offset(35).limit(50);
+
+    b.get();
     console.log('done', JSON.stringify(b.json_result(), null, 2))
 }
 main();
