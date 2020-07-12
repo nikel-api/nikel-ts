@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/nikel)](https://www.npmjs.com/package/nikel)
 
-Please consult the [official Nikel API docs](https://docs.nikel.ml/) for information on query values, and response values.
+Please consult the [official Nikel API docs](https://docs.nikel.ml/) for additional information on query values, and response values.
 
 ### Install:
 ```
@@ -13,33 +13,16 @@ npm install nikel
 
 ```typescript
 // TypeScript (highly encouraged)
-import {Nikel} from 'nikel';
+import {Courses} from 'nikel';
 
 // JavaScript
-const {Nikel} = require('nikel');
+const {Courses} = require('nikel');
 
-// Initialize Nikel API client
-const client = new Nikel();
+// MongoDB-like syntax (highly encouraged)
+new Courses().where({id: {'$in': 'mat135'}}).get()
+    .then(res => console.log(JSON.stringify(res, null, 4)));
 
-// Get courses for id=mat135
-client.getCourses({id: "mat135"})
-    .then(resp => console.log(JSON.stringify(resp.data.response, null, 4)));
+// Legacy syntax
+new Courses().where({id: 'mat135'}).get()
+    .then(res => console.log(JSON.stringify(res, null, 4)));
 ```
-
-### Methods:
-
-Each method uses the following format:
-
-`get<titled_endpoint_name>(params)`
-
-`params` is a key-value object used to filter results.
-
-Please consult the official documentation for all available endpoints.
-
-##### Examples:
-
-`getCourses`
-
-`getTextbooks`
-
-`getExams`
