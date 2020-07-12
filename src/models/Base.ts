@@ -1,12 +1,23 @@
 import QueryObject from "./query/QueryObject";
 import {RequestFromQueryObject} from "../utils/RequestFromQueryObject";
+import axios, {AxiosInstance} from "axios";
 
 export default class Base {
     /** Build out query requirements */
     private query = new QueryObject();
+    private service: AxiosInstance;
 
     /** Must override this from Base */
-    public endpoint_callback = () => { throw new Error("Not implemented!") };
+    public endpoint = 'OVERRIDE_ME';
+
+    constructor() {
+        this.service = axios.create({
+            baseURL: 'https://nikel.ml/api/',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
     
     /** Standard where query. Can be used to
      * check equality, greater than, less than, etc.
@@ -38,11 +49,12 @@ export default class Base {
     }
 
     /** Get the results. */
-    public get() {
+    public async get() {
         let request_params = new RequestFromQueryObject(this.query);
         let request_query = request_params.formattedQuery();
+        let request_url = `${this.endpoint}?${request_query}`
 
-        console.log(request_query)
+        return await this.service.get(request_url);
     }
 
     json_result() {
@@ -51,15 +63,7 @@ export default class Base {
 }
 
 function main(){
-    let b = new Base();
-    b.where({name: 'hi', more_key: {'$eq': 2}, nested: { layer_1: 'layer_1_val', layer_1_2: { '$lt': 5 }, nested_2: { layer_2: 'layer_2_val' } }}).where({name: {'$eq': 'another hi'}}).where({another_key: {'$gt': 5}, more_key: 6})
-        .where({nested: {'$ne': 'nested_1_value', nested_2: { '$eq': 'nested_2_value', layer_2: { '$sw': 'some_prefix' } }}}).where({nested: {nested_2: {layer_2: 'new_layer_2_val_2'}}})
-    b.offset(35).limit(50);
-
-    b.get();
-
-    // let c = new Base();
-    // c.where({code: { '$ew': 'P' }}).where({coordinates: {latitude: {'$gt': 43}}}).get()
-    // console.log('done', JSON.stringify(b.json_result(), null, 2))
+    let c = new Base();
+    c.where({code: { '$ew': 'C' }}).where({coordinates: {latitude: {'$gt': 43}}}).get().then(resp => console.log(JSON.stringify(resp.data.response, null, 2)))
 }
 main();
