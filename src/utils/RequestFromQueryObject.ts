@@ -21,9 +21,29 @@ export class RequestFromQueryObject {
      * @return A query string that can be used in a URL.
      * */
     public formattedQuery() {
+        // All the fields that user wants to query
         let root_query = this.query_object.getQuery();
-        return this.getUrlFromQuery(root_query);
+
+        // All the additional meta data, such as limit & offset
+        let meta_query = this.query_object.getMeta();
+
+        let query_uri = this.getUrlFromQuery(root_query)
+        let meta_uri = this.getURLFromMetaQuery(meta_query);
+        return query_uri + '&' + meta_uri;
     }
+
+    /** Generate a query string to represent meta data
+     * @param query The query containing meta data
+     * */
+    private getURLFromMetaQuery(query: any) {
+        let url = '';
+        for(const key in query) {
+            url += `${key}=${query[key]}&`;
+        }
+        if(url.endsWith('&')) { url = url.slice(0, -1) }
+        return url;
+    }
+
 
     /** Generate a query string URL
      * from a QueryObject. This does most of the work.
