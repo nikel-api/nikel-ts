@@ -12,7 +12,7 @@ export default class Base {
      * check equality, greater than, less than, etc.
      * @param query An object
      */
-    where(query: Record<string, string | object | number | null>) {
+    where(query: Record<string, string | object | number | null>): Base {
         this.query.add_query(query);
         return this;
     }
@@ -22,7 +22,7 @@ export default class Base {
      * @param new_limit The limit to set.
      * @return this instance
      * */
-    public limit(new_limit: number) {
+    public limit(new_limit: number): Base {
         this.query.limit(new_limit);
         return this;
     }
@@ -32,14 +32,14 @@ export default class Base {
      * @param new_offset The offset to use.
      * @return this instance
      * */
-    public offset(new_offset: number) {
+    public offset(new_offset: number): Base {
         this.query.offset(new_offset);
         return this;
     }
 
     /** Get the results. */
     public get() {
-        let request_params = new RequestFromQueryObject(this.query.getQuery());
+        let request_params = new RequestFromQueryObject(this.query);
         let request_query = request_params.formattedQuery();
 
         console.log(request_query)
@@ -57,6 +57,9 @@ function main(){
     b.offset(35).limit(50);
 
     b.get();
-    console.log('done', JSON.stringify(b.json_result(), null, 2))
+
+    // let c = new Base();
+    // c.where({code: { '$ew': 'P' }}).where({coordinates: {latitude: {'$gt': 43}}}).get()
+    // console.log('done', JSON.stringify(b.json_result(), null, 2))
 }
 main();

@@ -35,7 +35,7 @@ export default class QueryObject {
      * @param query The query to parse
      * @return this instance
      * */
-    add_query(query: any) {
+    add_query(query: any): QueryObject {
         for(const attribute in query) {
             let value = query[attribute];
             let val_type = typeof(value);
@@ -77,20 +77,20 @@ export default class QueryObject {
         this.meta.offset = new_offset;
     }
 
-    /** Compile and return this query object into something
-     * that can be directly passed into a request body
-     * @return
-     * */
-    compile() {
-
-    }
-
     /** Get an object representing all the Queries made.
      * @return An object with all the queries
      * */
     public getQuery() {
         // Deep clone
         return JSON.parse(JSON.stringify(this.attributes));
+    }
+
+    /** Additional attributes that identify this
+     * query. E.g. the limit, offset, etc.
+     * @return Additional properties for this query
+     * */
+    public getMeta() {
+        return JSON.parse(JSON.stringify(this.meta));
     }
 
     /** For when a single value is assigned to an attribute
