@@ -1,4 +1,4 @@
-import QueryError from './Exceptions';
+import QueryError, {InvalidQueryError} from './Exceptions';
 
 /** A class to represent all the queries that can be made. */
 export default class QueryObject {
@@ -27,7 +27,7 @@ export default class QueryObject {
     ]
 
     /** Keep track of meta-data such as limit,  */
-    private meta = { limit: 100, offset: 0 };
+    private meta = { limit: 0, offset: 0 };
 
     /** Combine new query with existing data.
      * This can target any attribute, no matter how
@@ -101,6 +101,9 @@ export default class QueryObject {
      * @param attributes_level A reference to where this object is located in memory, under this.attributes
      */
     private _handleAtomicUpdate(key: string, val: string | number, update_type: string, attributes_level: any) {
+        // If the key is a built-in operation such as $eq, throw error
+        // Built-in operators must not be used as a key/attribute
+        if(QueryObject.ALLOWED_SYMBOLS.includes(key)) { throw new InvalidQueryError(`Cannot use the symbol ${key} as an attribute!`) }
 
         // Need to ensure it has space and $properties defined for itself
         if(!attributes_level[key]) {
@@ -122,7 +125,7 @@ export default class QueryObject {
         // If we're dealing with a single value
         if(typeof(val) !== 'object' || val == null) {
             // Base Case: We're no longer working with objects
-            // Make sure we have allocated room for this attribute
+            // Make sure we have allocated room for this attribute, then do atomic update
             if(!attribute_level[key]) { attribute_level[key] = { } }
             this._handleAtomicUpdate(key, val, '$eq', attribute_level);
             return;
@@ -136,6 +139,7 @@ export default class QueryObject {
                 this._handleAtomicUpdate(key, val[update_type], update_type, attribute_level);
             }
             else {  // Recursive Step: try again with this field in the object
+
                 // This is a nested field
                 if(!attribute_level[key]) {
                     attribute_level[key] = { };

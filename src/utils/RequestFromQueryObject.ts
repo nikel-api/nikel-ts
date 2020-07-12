@@ -60,6 +60,12 @@ export class RequestFromQueryObject {
         return encodeURI(url_builder);
     }
 
+    /** For a given attribute (e.g. name, address, code, etc.) generate a query string that
+     * represents it
+     * @param sub_query The object where this attribute is located
+     * @param key The key of the sub_query that identifies this attribute
+     * @param parent_key What is the key of the parent, optional.
+     * */
     private getUrlFromAttribute(sub_query: any, key: string, parent_key?: string) {
         let url = '';
         let url_key = parent_key ? `${parent_key}.${key}` : key
@@ -76,6 +82,9 @@ export class RequestFromQueryObject {
 
     /** Given a properties hash, return a string query
      * that represents it
+     * @param properties A $properties hash
+     * @param url_key A string that represents the attribute,
+     * for example 'coordinate.latitude', 'address.postal_code', 'name', etc.
      * */
     private getUrlParamsFromPropertiesHash(properties: any, url_key: string) {
         let url = '';
