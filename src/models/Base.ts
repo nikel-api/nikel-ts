@@ -58,8 +58,3 @@ export default class Base {
         return response.data.response;
     }
 }
-
-function main(){
-    let c = new Base();
-    c.where({code: { '$ew': 'C' }}).where({coordinates: {latitude: {'$gt': 43}}}).get().then(resp => console.log(JSON.stringify(resp, null, 2)))
-}

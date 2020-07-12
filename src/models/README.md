@@ -24,7 +24,7 @@ They can be as deeply nested and compounded as desired.
 
 (a) To get a course by code:
 ```typescript
-import { Courses } from Nikel;
+import { Courses } from nikel;
 
 // Course for id='CSCA08'
 Courses.where({ id: 'CSCA08' }).get();
@@ -34,14 +34,14 @@ Courses.where({ id: { '$eq': 'CSCA08' } }).get();
 ```
 (b) To access a nested field
 ```typescript
-import { Buildings } from Nikel;
+import { Buildings } from nikel;
 
 Buildings.where({ address: { postal: 'M5S 1A1' } }).get();
 ```
 
 (c) Change query based on a condition
 ```typescript
-import { Foods } from Nikel;
+import { Foods } from nikel;
 
 let my_food = Foods.where({ campus: 'St. George' });
 
@@ -54,7 +54,7 @@ my_food.get();   // All food places at St. George with longitude less than 50
 
 (d) Combining various operations
 ```typescript
-import { Courses } from Nikel;
+import { Courses } from nikel;
 
 let my_courses = Courses.where({
     id: { '$sw': 'CSC' },

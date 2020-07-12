@@ -11,6 +11,16 @@ npm install nikel
 
 ### Example Usage:
 
+To use the higher-level APIs:
+```typescript
+import { Courses } from 'nikel';
+
+// Get courses for id=mat135
+const my_query = Courses.where({ id: 'mat135' })
+const my_courses = await my_query.get()     // An array of courses
+```
+
+To access the lower-level APIs directly:
 ```typescript
 // TypeScript (highly encouraged)
 import {Nikel} from 'nikel';
