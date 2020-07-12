@@ -120,7 +120,7 @@ export default class QueryObject {
      */
     private _handleObjectUpdate(key: string, val: any, attribute_level: any) {
         // If we're dealing with a single value
-        if(typeof(val) !== 'object') {
+        if(typeof(val) !== 'object' || val == null) {
             // Base Case: We're no longer working with objects
             // Make sure we have allocated room for this attribute
             if(!attribute_level[key]) { attribute_level[key] = { } }
