@@ -1,6 +1,6 @@
 # Models
 This section contains information on each of the models provided by the Nikel API. All models inherit
-from `Base`, and only specify information that is unique to them. Currently, that information is
+from `Base`, and only specify information that is unique to them. Currently, that information 
 tells the `Axios` service where to send queries.
 
 ## Usage
@@ -30,7 +30,7 @@ import { Courses } from nikel;
 Courses.where({ id: 'CSCA08' }).get();
 
 // More verbously
-Courses.where({ id: { '$eq': 'CSCA08' } }).get();
+Courses.where({ id: { $eq: 'CSCA08' } }).get();
 ```
 (b) To access a nested field
 ```typescript
@@ -46,7 +46,7 @@ import { Foods } from nikel;
 let my_food = Foods.where({ campus: 'St. George' });
 
 if(its_my_birthday()) {
-    my_food.where({ coordinates: { longitude: { '$lt': 50 } } });
+    my_food.where({ coordinates: { longitude: { $lt: 50 } } });
 }
 
 my_food.get();   // All food places at St. George with longitude less than 50
@@ -54,16 +54,15 @@ my_food.get();   // All food places at St. George with longitude less than 50
 
 (d) Combining various operations
 ```typescript
-import { Courses } from nikel;
+import { Buildings } from nikel;
 
-let my_courses = Courses.where({
-    id: { '$sw': 'CSC' },
-    level: '200/B',
-    name: { '$ew': 'II' }
-})
-.where({
-    recommended_preparation: null,
-    campus: 'Scarborough',
-    apsc_electives: { '$eq': null } 
+let my_courses = Buildings.where({
+    id: { $sw: '13' },
+    code: 'NR',
+    name: { $ew: 'II' },
+    coordinates: {
+        latitude: { $gt: 30 },
+        longitude: -79.40078
+    }
 });
 ```

@@ -16,8 +16,11 @@ To use the higher-level APIs:
 import { Courses } from 'nikel';
 
 // Get courses for id=mat135
-const my_query = Courses.where({ id: 'mat135' })
-const my_courses = await my_query.get()     // An array of courses
+const my_courses = await Courses.where({ id: 'mat135' }).get()    // An array of courses
+
+// Or Using .then()
+Courses.where({ id: 'mat135' }).get()
+    .then(my_courses => console.log);
 ```
 
 To access the lower-level APIs directly:
