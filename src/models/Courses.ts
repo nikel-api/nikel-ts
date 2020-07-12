@@ -1,15 +1,15 @@
 import Base from "./Base";
 
-class Courses extends Base {
-    public endpoint_callback = () => { throw new Error("Not implemented!") };
-
+export class Courses extends Base {
+    public endpoint = 'courses';
     constructor() { super(); }
 }
 
 
 function main(){
     let c = new Courses();
-    console.log(c);
+    c.where({code: {'$sw': 'CSCA'}})
+    c.get().then(resp => console.log(JSON.stringify(resp, null, 2)))
 }
 
 main();

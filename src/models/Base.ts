@@ -54,16 +54,12 @@ export default class Base {
         let request_query = request_params.formattedQuery();
         let request_url = `${this.endpoint}?${request_query}`
 
-        return await this.service.get(request_url);
-    }
-
-    json_result() {
-        return this.query.attributes;
+        let response = await this.service.get(request_url)
+        return response.data.response;
     }
 }
 
 function main(){
     let c = new Base();
-    c.where({code: { '$ew': 'C' }}).where({coordinates: {latitude: {'$gt': 43}}}).get().then(resp => console.log(JSON.stringify(resp.data.response, null, 2)))
+    c.where({code: { '$ew': 'C' }}).where({coordinates: {latitude: {'$gt': 43}}}).get().then(resp => console.log(JSON.stringify(resp, null, 2)))
 }
-main();
