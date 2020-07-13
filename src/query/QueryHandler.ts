@@ -5,8 +5,7 @@ export class QueryHandler {
     /**
      * Saved params
      */
-        // TODO: change this
-    public query: Query = [];
+    private query: Query = [];
 
     /**
      * List of allowed operators
