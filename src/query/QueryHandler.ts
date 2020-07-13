@@ -10,7 +10,7 @@ export class QueryHandler {
     /**
      * List of allowed operators
      */
-    private static SYMBOL_TO_PREFIX_MAPPING: { [key: string]: { [key: string]: string | undefined } } = {
+    private static SYMBOL_TO_PREFIX_MAPPING: { [key: string]: { [key: string]: string } } = {
         '$eq': {
             'string': '=',
             'number': '=',
@@ -60,7 +60,7 @@ export class QueryHandler {
      * @param query InputQuery object
      * @return      This instance
      */
-    addQuery(query: InputQuery): QueryHandler {
+    addQuery(query: InputQuery): this {
         for (const [queryKey, queryValue] of Object.entries(query)) {
             const queryValueType = typeof queryValue;
             switch (queryValueType) {
@@ -108,7 +108,7 @@ export class QueryHandler {
      * @param newLimit  The limit to set.
      * @return          This instance
      */
-    limit(newLimit: number): QueryHandler {
+    limit(newLimit: number): this {
         this.meta.limit = newLimit;
         return this;
     }
@@ -120,7 +120,7 @@ export class QueryHandler {
      * @param newOffset The offset to use.
      * @return          This instance
      */
-    offset(newOffset: number): QueryHandler {
+    offset(newOffset: number): this {
         this.meta.offset = newOffset;
         return this;
     }
@@ -130,7 +130,7 @@ export class QueryHandler {
      *
      * @return This instance
      */
-    reset(): QueryHandler {
+    reset(): this {
         this.meta = QueryHandler.DEFAULT_META;
         return this;
     }
