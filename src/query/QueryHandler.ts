@@ -16,13 +16,13 @@ export class QueryHandler {
             'number': '=',
             'boolean': '=',
         },
-        '$in': {
-            'string': '',
-        },
         '$ne': {
             'string': '!',
             'number': '!',
             'boolean': '!',
+        },
+        '$in': {
+            'string': '',
         },
         '$lt': {
             'number': '<',
@@ -70,9 +70,9 @@ export class QueryHandler {
                 case 'string':
                     this.query.push([queryKey, queryValue.toString()]);
                     break;
-                // If object, process as QueryFilter
+                // If object, process as Partial<QueryFilter>
                 case 'object':
-                    const queryFilter = queryValue as QueryFilter;
+                    const queryFilter = queryValue as Partial<QueryFilter>;
                     // Loop through all filters
                     for (const [queryOp, queryFilterValue] of Object.entries(queryFilter)) {
                         // Check if query operator exists
