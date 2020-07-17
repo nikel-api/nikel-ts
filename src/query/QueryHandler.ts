@@ -42,6 +42,9 @@ export class QueryHandler {
         '$ew': {
             'string': ')',
         },
+        '$sr': {
+            'string': '~',
+        },
     };
 
     /**
