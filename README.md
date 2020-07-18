@@ -38,6 +38,20 @@ new Courses().where({id: 'mat135'}).get()
 * Buildings
 * Parking
 
+### Methods
+
+Each endpoint has the same set of methods.
+
+`where(query)`: Adds `query` to the list of existing queries.
+
+`limit(integer)`: Sets the number of items returned to `integer`.
+
+`offset(integer)`: Sets the offset of the items returned to `integer`.
+
+`get()`: Returns a Promise wrapped with the queried items.
+
+`reset()`: Resets query and also sets meta-data (limit and offset) to defaults.
+
 ### MongoDB-like Queries
 
 | Operator | String        | Numerical / Boolean      |

@@ -107,11 +107,15 @@ export class QueryHandler {
     /**
      * Set a limit of number of results to return. Defaults to 10.
      * If multiple calls are made, only the last one will be used.
+     * The limit can only an integer between 1-100 inclusive.
      *
      * @param newLimit  The limit to set.
      * @return          This instance
      */
     limit(newLimit: number): this {
+        if (!Number.isInteger(newLimit) || newLimit < 1 || newLimit > 100) {
+            throw new QueryError(`limit ${newLimit} is not an integer in the range 1-100`);
+        }
         this.meta.limit = newLimit;
         return this;
     }
@@ -119,11 +123,15 @@ export class QueryHandler {
     /**
      * Offset the query results. Defaults to 0.
      * If multiple are provided, the last one will be used.
+     * The offset can only an integer greater or equal to 1.
      *
      * @param newOffset The offset to use.
      * @return          This instance
      */
     offset(newOffset: number): this {
+        if (!Number.isInteger(newOffset) || newOffset < 1) {
+            throw new QueryError(`offset is not an integer greater or equal to 1`);
+        }
         this.meta.offset = newOffset;
         return this;
     }
