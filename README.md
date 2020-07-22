@@ -30,6 +30,7 @@ new Courses().where({id: 'mat135'}).get()
 ### Current list of endpoints
 
 * Courses
+* Programs
 * Textbooks
 * Exams
 * Evals

@@ -50,7 +50,7 @@ export class Courses extends Base {
     /**
      * Get a Courses array.
      *
-     * @return CoursesResponse array
+     * @return CourseResponse array
      */
     public get(): Promise<CourseResponse[]> {
         return this._get();
