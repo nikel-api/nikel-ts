@@ -7,7 +7,7 @@ interface CourseResponse {
     id: string
     code: string | null
     name: string
-    description: string
+    description: string | null
     division: string
     department: string
     prerequisites: string | null
